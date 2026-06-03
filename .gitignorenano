@@ -1,0 +1,12 @@
+
+data/raw/
+data/processed/
+embeddings/cache/
+evaluation/results/
+
+
+.venv/
+__pycache__/
+
+*.parquet
+*.npy

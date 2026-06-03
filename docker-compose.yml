@@ -1,0 +1,81 @@
+# Inference via vLLM (OpenAI-compatible API on container port 8000 → host 5000).
+# Start: docker compose --profile infra up -d vllm-chat
+# Chat: POST http://localhost:5000/v1/chat/completions  |  Models: GET /v1/models
+# FinSight LlamaModel / MistralModel use OPENAI_COMPAT_BASE_URL (see .env.example).
+
+services:
+  vllm-chat:
+    profiles: ["infra"]
+    image: vllm/vllm-openai:latest
+    container_name: vllm-chat
+    restart: unless-stopped
+    ports:
+      - "5000:8000"
+    gpus: all
+    command:
+      - --model
+      - TheBloke/Mistral-7B-Instruct-v0.2-GPTQ
+      - --quantization
+      - gptq_marlin
+      - --dtype
+      - float16
+      - --kv-cache-dtype
+      - fp8
+      - --max-model-len
+      - "8192"
+      - --gpu-memory-utilization
+      - "0.92"
+      - --max-num-seqs
+      - "6"
+      - --max-num-batched-tokens
+      - "8192"
+      - --swap-space
+      - "8"
+      - --disable-log-requests
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+    volumes:
+      - /mnt/data-disk/vllm_cache:/root/.cache
+    environment:
+      - HF_HOME=/root/.cache
+      - TRANSFORMERS_CACHE=/root/.cache
+      - TMPDIR=/root/.cache
+      - CUDA_VISIBLE_DEVICES=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    networks:
+      - default
+  qdrant:
+    profiles: ["infra"]
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-storage:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - default
+
+volumes:
+  qdrant-storage:
+
+networks:
+  default:
+    driver: bridge

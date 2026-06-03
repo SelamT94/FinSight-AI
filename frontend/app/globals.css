@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-bg-strong: rgba(255, 255, 255, 0.22);
+    --glass-border: rgba(255, 255, 255, 0.35);
+    --glass-highlight: rgba(255, 255, 255, 0.55);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.62);
+    --text-muted: rgba(255, 255, 255, 0.45);
+    --accent: #64d2ff;
+    --accent-2: #bf5af2;
+    --accent-3: #30d158;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply min-h-screen overflow-x-hidden text-white antialiased;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Pro Display",
+      "SF Pro Text",
+      "Segoe UI",
+      system-ui,
+      sans-serif;
+    background: #0a0a12;
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      var(--glass-shadow),
+      inset 0 1px 0 var(--glass-highlight),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(48px) saturate(200%);
+    -webkit-backdrop-filter: blur(48px) saturate(200%);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      var(--glass-shadow),
+      inset 0 1px 0 var(--glass-highlight);
+  }
+
+  .glass-inset {
+    background: rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .glass-nav-active {
+    background: linear-gradient(
+      135deg,
+      rgba(100, 210, 255, 0.35) 0%,
+      rgba(191, 90, 242, 0.28) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 4px 24px rgba(100, 210, 255, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  .glass-btn-primary {
+    background: linear-gradient(
+      180deg,
+      rgba(100, 210, 255, 0.9) 0%,
+      rgba(10, 132, 255, 0.85) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow:
+      0 4px 20px rgba(10, 132, 255, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    @apply text-white transition-all duration-200;
+  }
+
+  .glass-btn-primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+    box-shadow:
+      0 6px 28px rgba(10, 132, 255, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .glass-btn-secondary {
+    @apply glass text-white/90 transition-all duration-200;
+  }
+
+  .glass-btn-secondary:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-input {
+    @apply glass-inset w-full rounded-2xl px-4 py-2.5 text-sm text-white/95 outline-none transition;
+  }
+
+  .glass-input:focus {
+    border-color: rgba(100, 210, 255, 0.5);
+    box-shadow:
+      inset 0 2px 8px rgba(0, 0, 0, 0.15),
+      0 0 0 3px rgba(100, 210, 255, 0.2);
+  }
+
+  .glass-select {
+    @apply glass-input appearance-none cursor-pointer pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.6)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+  }
+
+  .glass-select option {
+    @apply bg-slate-900 text-white;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .orb-1 {
+    width: 42vmax;
+    height: 42vmax;
+    background: radial-gradient(circle, #5ac8fa 0%, transparent 70%);
+    top: -12%;
+    left: -8%;
+    animation: orb-float-1 22s ease-in-out infinite;
+  }
+
+  .orb-2 {
+    width: 38vmax;
+    height: 38vmax;
+    background: radial-gradient(circle, #bf5af2 0%, transparent 70%);
+    top: 35%;
+    right: -12%;
+    animation: orb-float-2 26s ease-in-out infinite;
+  }
+
+  .orb-3 {
+    width: 32vmax;
+    height: 32vmax;
+    background: radial-gradient(circle, #30d158 0%, transparent 70%);
+    bottom: -8%;
+    left: 25%;
+    animation: orb-float-3 20s ease-in-out infinite;
+  }
+
+  .orb-4 {
+    width: 28vmax;
+    height: 28vmax;
+    background: radial-gradient(circle, #ff9f0a 0%, transparent 70%);
+    bottom: 20%;
+    right: 20%;
+    opacity: 0.35;
+    animation: orb-float-4 24s ease-in-out infinite;
+  }
+
+  .chart-tooltip {
+    @apply glass-strong rounded-xl px-3 py-2 text-xs text-white/90;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+}
+
+@keyframes orb-float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(4%, 6%) scale(1.06);
+  }
+}
+
+@keyframes orb-float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-5%, 4%) scale(1.08);
+  }
+}
+
+@keyframes orb-float-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(3%, -5%) scale(1.05);
+  }
+}
+
+@keyframes orb-float-4 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-4%, -3%);
+  }
+}
+
+/* Recharts on dark glass */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.08) !important;
+}
+
+.recharts-text {
+  fill: rgba(255, 255, 255, 0.55) !important;
+  font-size: 11px;
+}
+
+.recharts-legend-item-text {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
